@@ -41,6 +41,7 @@ function List() {
 function Search() {
   const handleChange = (event) => {
     console.log(event);
+    console.log(event.target.value);
   };
 
   const handleMouseOver = (event) => {
