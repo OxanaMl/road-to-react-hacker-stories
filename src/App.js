@@ -25,11 +25,13 @@ const Item = (props) => {
   );
 };
 
-function Search() {
+function Search(props) {
+  //added props argument
   const [searchTerm, setSearchTerm] = React.useState("");
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
+    props.onSearch(event); //this is in the child component we are calling on parent
   };
 
   return (
@@ -64,10 +66,16 @@ function App() {
     },
   ];
 
+  // this is another handleChange, but this one will be populated in console, not HTML of the page
+  const handleChange = (event) => {
+    console.log(event.target.value);
+  };
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
-      <Search />
+      <Search onSearch={handleChange} />{" "}
+      {/* added a prop in the parent component*/}
       <hr />
       <List list={stories} />
     </div>
