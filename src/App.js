@@ -32,21 +32,10 @@ function Search() {
     setSearchTerm(event.target.value);
   };
 
-  // Not important here:
-
-  // const handleMouseOver = (event) => {
-  //   console.log(event);
-  // };
-
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input
-        id="search"
-        type="text"
-        onChange={handleChange}
-        // onMouseOver={handleMouseOver}
-      />
+      <input id="search" type="text" onChange={handleChange} />
 
       <p>
         Searching for <strong>{searchTerm}</strong>
@@ -54,39 +43,6 @@ function Search() {
     </div>
   );
 }
-
-// Video teacher explanation:
-// function Search() {
-//   const [searchTerm, setSearchTerm] = React.useState("");
-
-//   console.log(`Rendering search with searchTerm ${searchTerm}`);
-
-//   const handleChange = (event) => {
-//     console.log(`Before setting searchTerm: ${searchTerm}`);
-//     setSearchTerm(event.target.value);
-//     console.log(`After setting searchTerm: ${searchTerm}`);
-//   };
-
-//   const handleMouseOver = (event) => {
-//     console.log(event);
-//   };
-
-//   return (
-//     <div>
-//       <label htmlFor="search">Search: </label>
-//       <input
-//         id="search"
-//         type="text"
-//         onChange={handleChange}
-//         onMouseOver={handleMouseOver}
-//       />
-
-//       <p>
-//         Searching for <strong>{searchTerm}</strong>
-//       </p>
-//     </div>
-//   );
-// }
 
 function App() {
   const stories = [
