@@ -26,14 +26,17 @@ const Item = (props) => {
 };
 
 function Search() {
+  const [searchTerm, setSearchTerm] = React.useState("");
+
   const handleChange = (event) => {
-    console.log(event);
-    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
-  const handleMouseOver = (event) => {
-    console.log(event);
-  };
+  // Not important here:
+
+  // const handleMouseOver = (event) => {
+  //   console.log(event);
+  // };
 
   return (
     <div>
@@ -42,11 +45,48 @@ function Search() {
         id="search"
         type="text"
         onChange={handleChange}
-        onMouseOver={handleMouseOver}
+        // onMouseOver={handleMouseOver}
       />
+
+      <p>
+        Searching for <strong>{searchTerm}</strong>
+      </p>
     </div>
   );
 }
+
+// Video teacher explanation:
+// function Search() {
+//   const [searchTerm, setSearchTerm] = React.useState("");
+
+//   console.log(`Rendering search with searchTerm ${searchTerm}`);
+
+//   const handleChange = (event) => {
+//     console.log(`Before setting searchTerm: ${searchTerm}`);
+//     setSearchTerm(event.target.value);
+//     console.log(`After setting searchTerm: ${searchTerm}`);
+//   };
+
+//   const handleMouseOver = (event) => {
+//     console.log(event);
+//   };
+
+//   return (
+//     <div>
+//       <label htmlFor="search">Search: </label>
+//       <input
+//         id="search"
+//         type="text"
+//         onChange={handleChange}
+//         onMouseOver={handleMouseOver}
+//       />
+
+//       <p>
+//         Searching for <strong>{searchTerm}</strong>
+//       </p>
+//     </div>
+//   );
+// }
 
 function App() {
   const stories = [
