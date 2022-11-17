@@ -43,47 +43,37 @@ function App() {
   );
 }
 
-const Search = (props) => {
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input
-        id="search"
-        type="text"
-        value={props.search}
-        onChange={props.onSearch}
-      />
+// destructuring used in the func signature below:
+const Search = ({ search, onSearch }) => (
+  <div>
+    <label htmlFor="search">Search: </label>
+    <input id="search" type="text" value={search} onChange={onSearch} />
 
-      <p>
-        Searching for <strong>{props.search}</strong>
-      </p>
-    </div>
-  );
-};
+    <p>
+      Searching for <strong>{search}</strong>
+    </p>
+  </div>
+);
 
-function List(props) {
-  return (
-    <ul>
-      {props.list.map(function (item) {
-        return <Item item={item} />;
-      })}
-    </ul>
-  );
-}
+// destructuring below:
+const List = ({ list }) => (
+  <ul>
+    {list.map((item) => (
+      <Item key={item.objectID} item={item} />
+    ))}
+  </ul>
+);
 
-const Item = (props) => {
-  const item = props.item;
-
-  return (
-    <li key={item.objectID}>
-      <span>
-        <a href={item.url}>{item.title}</a>
-      </span>
-      <span>{item.author}</span>
-      <span>{item.num_comments}</span>
-      <span>{item.points}</span>
-    </li>
-  );
-};
+// nested destructuring below:
+const Item = ({ item: { title, url, author, num_comments, points } }) => (
+  <li>
+    <span>
+      <a href={url}>{title}</a>
+    </span>
+    <span>{author}</span>
+    <span>{num_comments}</span>
+    <span>{points}</span>
+  </li>
+);
 
 export default App;
