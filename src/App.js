@@ -20,7 +20,7 @@ function App() {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchTerm, setSearchTerm] = React.useState("React");
 
   // this is another handleChange, but this one will be populated in console, not HTML of the page
   const handleChange = (event) => {
@@ -36,30 +36,30 @@ function App() {
   return (
     <div>
       <h1>My Hacker Stories</h1>
-      <Search onSearch={handleChange} searchTerm={searchTerm} />{" "}
-      {/* added a prop in the parent component*/}
+      <Search onSearch={handleChange} search={searchTerm} />
       <hr />
       <List list={searchedStories} />
     </div>
   );
 }
 
-function Search(props) {
-  const handleChange = (event) => {
-    props.onSearch(event); //this is in the child component we are calling on parent
-  };
-
+const Search = (props) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange} />
+      <input
+        id="search"
+        type="text"
+        value={props.search}
+        onChange={props.onSearch}
+      />
 
       <p>
-        Searching for <strong>{props.searchTerm}</strong>
+        Searching for <strong>{props.search}</strong>
       </p>
     </div>
   );
-}
+};
 
 function List(props) {
   return (
