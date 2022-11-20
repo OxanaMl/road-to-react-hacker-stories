@@ -43,7 +43,6 @@ function App() {
   );
 }
 
-// destructuring used in the func signature below:
 const Search = ({ search, onSearch }) => (
   <div>
     <label htmlFor="search">Search: </label>
@@ -55,17 +54,16 @@ const Search = ({ search, onSearch }) => (
   </div>
 );
 
-// destructuring below:
+// spread and rest operators:
 const List = ({ list }) => (
   <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} />
+    {list.map(({ objectID, ...item }) => (
+      <Item key={objectID} {...item} />
     ))}
   </ul>
 );
 
-// nested destructuring below:
-const Item = ({ item: { title, url, author, num_comments, points } }) => (
+const Item = ({ title, url, author, num_comments, points }) => (
   <li>
     <span>
       <a href={url}>{title}</a>
