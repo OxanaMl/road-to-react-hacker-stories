@@ -54,7 +54,6 @@ const Search = ({ search, onSearch }) => (
   </div>
 );
 
-// spread and rest operators:
 const List = ({ list }) => (
   <ul>
     {list.map((item) => (
