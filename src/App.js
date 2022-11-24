@@ -1,5 +1,19 @@
 import * as React from "react";
 
+// custom hook:
+const useSemiPersistentState = (key, initialState) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
+  );
+
+  // store searchTerm whenever input is received
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value, key]);
+
+  return [value, setValue];
+};
+
 const App = () => {
   const stories = [
     {
@@ -20,15 +34,7 @@ const App = () => {
     },
   ];
 
-  // 2) use the stored value if exists, otherwise default to "React" in our case
-  const [searchTerm, setSearchTerm] = React.useState(
-    localStorage.getItem("search") || "React"
-  );
-
-  // 1) store searchTerm whenever input is received
-  React.useEffect(() => {
-    localStorage.setItem("search", searchTerm);
-  }, [searchTerm]);
+  const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
