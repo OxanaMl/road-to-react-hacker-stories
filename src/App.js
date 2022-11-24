@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function App() {
+const App = () => {
   const stories = [
     {
       title: "React",
@@ -20,11 +20,17 @@ function App() {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = React.useState("React");
+  // 2) use the stored value if exists, otherwise default to "React" in our case
+  const [searchTerm, setSearchTerm] = React.useState(
+    localStorage.getItem("search") || "React"
+  );
 
-  // this is another handleChange, but this one will be populated in console, not HTML of the page
+  // 1) store searchTerm whenever input is received
+  React.useEffect(() => {
+    localStorage.setItem("search", searchTerm);
+  }, [searchTerm]);
+
   const handleChange = (event) => {
-    console.log(event.target.value);
     setSearchTerm(event.target.value);
   };
 
@@ -41,7 +47,7 @@ function App() {
       <List list={searchedStories} />
     </div>
   );
-}
+};
 
 const Search = ({ search, onSearch }) => (
   <div>
