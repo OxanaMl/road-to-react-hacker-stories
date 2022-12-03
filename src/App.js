@@ -48,22 +48,23 @@ const App = () => {
   return (
     <div>
       <h1>My Hacker Stories</h1>
-      <Search onSearch={handleChange} search={searchTerm} />
+      <InputWithLabel
+        id="search"
+        label="Search"
+        value={searchTerm}
+        onInputChange={handleChange}
+      />
       <hr />
       <List list={searchedStories} />
     </div>
   );
 };
 
-// fragment <>...</>
-const Search = ({ search, onSearch }) => (
+const InputWithLabel = ({ id, label, value, type = "text", onInputChange }) => (
   <>
-    <label htmlFor="search">Search: </label>
-    <input id="search" type="text" value={search} onChange={onSearch} />
-
-    <p>
-      Searching for <strong>{search}</strong>
-    </p>
+    <label htmlFor={id}>{label} </label>
+    &nbsp;
+    <input id={id} type={type} value={value} onChange={onInputChange} />
   </>
 );
 
