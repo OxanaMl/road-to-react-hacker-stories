@@ -19,7 +19,6 @@ const initialStories = [
   },
 ];
 
-// async
 const getAsyncStories = () =>
   new Promise((resolve) =>
     setTimeout(() => resolve({ data: { stories: initialStories } }), 2000)
@@ -39,30 +38,46 @@ const useSemiPersistentState = (key, initialState) => {
   return [value, setValue];
 };
 
+// advanced state - reducer function
+const storiesReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_STORIES":
+      return action.payload;
+    case "REMOVE_STORY":
+      return state.filter(
+        (story) => action.payload.objectID !== story.objectID
+      );
+    default:
+      throw new Error();
+  }
+};
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
-  const [stories, setStories] = React.useState([]); // async []
+  // const [stories, setStories] = React.useState([]); // normal way to use state
+  const [stories, dispatchStories] = React.useReducer(storiesReducer, []); // advanced state takes arg-s (reducer function, initial state)
   const [isLoading, setIsLoading] = React.useState(false); // conditional for loading (1)
   const [isError, setIsError] = React.useState(false); // conditional for error handling (1)
 
-  // async
   React.useEffect(() => {
     setIsLoading(true); // conditional for loading (2)
 
     getAsyncStories()
       .then((result) => {
-        setStories(result.data.stories);
+        dispatchStories({
+          type: "SET_STORIES",
+          payload: result.data.stories,
+        });
         setIsLoading(false); // conditional for loading (3)
       })
       .catch(() => setIsError(true)); // conditional for error handling (2)
   }, []);
 
   const handleRemoveStory = (item) => {
-    const newStories = stories.filter(
-      (story) => item.objectID !== story.objectID
-    );
-
-    setStories(newStories);
+    dispatchStories({
+      type: "REMOVE_STORY",
+      payload: item,
+    });
   };
 
   const handleChange = (event) => {
