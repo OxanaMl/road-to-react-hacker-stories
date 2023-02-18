@@ -5,15 +5,22 @@ import { ReactComponent as Check } from "./check.svg";
 
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
-// custom hook:
+// Custom hook: improved performance (Don't run on first render)
 const useSemiPersistentState = (key, initialState) => {
+  const isMounted = React.useRef(false);
+
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
   );
 
   // store searchTerm whenever input is received
   React.useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      console.log("A");
+      localStorage.setItem(key, value);
+    }
   }, [value, key]);
 
   return [value, setValue];
@@ -54,6 +61,13 @@ const storiesReducer = (state, action) => {
   }
 };
 
+// Performance improvement example (Don’t rerun expensive computations 1)
+const getSumComments = (stories) => {
+  console.log("C");
+
+  return stories.data.reduce((result, value) => result + value.num_comments, 0);
+};
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
   const [url, setUrl] = React.useState(`${API_ENDPOINT}${searchTerm}`);
@@ -83,12 +97,13 @@ const App = () => {
     handleFetchStories();
   }, [handleFetchStories]);
 
-  const handleRemoveStory = (item) => {
+  // Performance improvement by useCallback() (Don’t re-render if not needed)
+  const handleRemoveStory = React.useCallback((item) => {
     dispatchStories({
       type: "REMOVE_STORY",
       payload: item,
     });
-  };
+  }, []);
 
   const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
@@ -119,9 +134,16 @@ const App = () => {
     </form>
   );
 
+  console.log("B:App");
+
+  // Performance improvement example (Don’t rerun expensive computations 2)
+  const sumComments = React.useMemo(() => getSumComments(stories), [stories]);
+
   return (
     <div className="container">
-      <h1 className="headline-primary">My Hacker Stories</h1>
+      <h1 className="headline-primary">
+        My Hacker Stories with {sumComments} comments
+      </h1>
 
       <SearchForm
         searchTerm={searchTerm}
@@ -173,12 +195,16 @@ const InputWithLabel = ({
   );
 };
 
-const List = ({ list, onRemoveItem }) => (
-  <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
-    ))}
-  </ul>
+// Performance improvement by memo (Don’t re-render if not needed)
+const List = React.memo(
+  ({ list, onRemoveItem }) =>
+    console.log("B:List") || (
+      <ul>
+        {list.map((item) => (
+          <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
+        ))}
+      </ul>
+    )
 );
 
 const Item = ({ item, onRemoveItem }) => (
