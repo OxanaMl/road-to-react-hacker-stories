@@ -6,7 +6,10 @@ import { ReactComponent as Check } from "./check.svg";
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
 // custom hook:
-const useSemiPersistentState = (key, initialState) => {
+const useSemiPersistentState = (
+  key: string,
+  initialState: string
+): [string, (newValue: string) => void] => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
   );
@@ -17,6 +20,15 @@ const useSemiPersistentState = (key, initialState) => {
   }, [value, key]);
 
   return [value, setValue];
+};
+
+type Story = {
+  objectID: string;
+  url: string;
+  title: string;
+  author: string;
+  num_comments: number;
+  points: number;
 };
 
 // advanced state - reducer function
@@ -181,7 +193,13 @@ const List = ({ list, onRemoveItem }) => (
   </ul>
 );
 
-const Item = ({ item, onRemoveItem }) => (
+const Item = ({
+  item,
+  onRemoveItem,
+}: {
+  item: Story;
+  onRemoveItem: (item: Story) => void;
+}) => (
   <li className="item">
     <span style={{ width: "40%" }}>
       <a href={item.url}>{item.title}</a>
